@@ -3745,9 +3745,10 @@ call:
 				//
 				Class class = [callee class];
 				JSValueRef result = NULL;
+        id script = nil;
 				while (class)
 				{
-					id script = [NSString stringWithFormat:@"__globalJSFunctionRepository__.%@.%@", class, propertyName];
+					script = [NSString stringWithFormat:@"__globalJSFunctionRepository__.%@.%@", class, propertyName];
 					JSStringRef	jsScript = JSStringCreateWithUTF8CString([script UTF8String]);
 					result = JSEvaluateScript(ctx, jsScript, NULL, NULL, 1, NULL);
 					JSStringRelease(jsScript);
@@ -3764,6 +3765,7 @@ call:
 					JSObjectRef o = [jsc newPrivateFunction];
 					JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 					private.type = @"jsFunction";
+          NSLog(@"script:%@ result:%@", script, [jsc unboxJSValueRef:result]);
 					[private setJSValueRef:result ctx:ctx];
 					return	o;
 				}
