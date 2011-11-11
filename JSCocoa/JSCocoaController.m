@@ -3765,7 +3765,7 @@ call:
 					JSObjectRef o = [jsc newPrivateFunction];
 					JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 					private.type = @"jsFunction";
-          NSLog(@"script:%@ result:%@", script, [jsc unboxJSValueRef:result]);
+          NSLog(@"script:%@ result:%@ object:%@ propertyName:%@", script, [jsc unboxJSValueRef:result], [jsc unboxJSValueRef:object], propertyName);
 					[private setJSValueRef:result ctx:ctx];
 					return	o;
 				}
