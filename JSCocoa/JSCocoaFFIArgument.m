@@ -1260,7 +1260,25 @@ static NSMutableDictionary* typeEncodings = nil;
 		BOOL isArray = JSValueToBoolean(ctx, result);
 		
 		if (isArray)	return	[self unboxJSArray:jsObject toObject:o inContext:ctx];
-		else			return	[self unboxJSHash:jsObject toObject:o inContext:ctx];
+		else {
+      scriptJS = JSStringCreateWithUTF8CString("return arguments[0].constructor == Date.prototype.constructor");
+      fn = JSObjectMakeFunction(ctx, NULL, 0, NULL, scriptJS, NULL, 1, NULL);
+      result = JSObjectCallAsFunction(ctx, fn, NULL, 1, (JSValueRef*)&jsObject, NULL);
+      JSStringRelease(scriptJS);
+      
+      BOOL isDate = JSValueToBoolean(ctx, result);
+      if (isDate) {
+        JSStringRef scriptJS = JSStringCreateWithUTF8CString([@"return this.getTime()" UTF8String]);
+        JSObjectRef fn = JSObjectMakeFunction(ctx, NULL, 0, NULL, scriptJS, NULL, 1, NULL);
+        JSValueRef milliseconds	= JSObjectCallAsFunction(ctx, fn, JSValueToObject(ctx, value, NULL), 0, NULL, NULL);
+        JSStringRelease(scriptJS);
+        double millisecondsD = JSValueToNumber(ctx, milliseconds, NULL);
+        *(id*)o = [NSDate dateWithTimeIntervalSince1970:millisecondsD / 1000];        
+        return YES;
+      } else {
+        return	[self unboxJSHash:jsObject toObject:o inContext:ctx]; 
+      }
+    }
 	}
 	// ## Hmmm ? CGColorRef is returned as a pointer but CALayer.foregroundColor asks an objc object (@)
 /*
