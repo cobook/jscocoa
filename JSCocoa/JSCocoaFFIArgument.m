@@ -1358,12 +1358,12 @@ static NSMutableDictionary* typeEncodings = nil;
 		JSValueRef jsValue	= JSObjectGetProperty(ctx, object, name, &exception);
 		if (exception)	return	NO;
 		if (![self unboxJSValueRef:jsValue toObject:&value inContext:ctx])	return	NO;
-		//if (!value)	value = [NSValue valueWithPointer:NULL];
-		
-		// Add converted value to hash
-		id key				= (NSString*)JSStringCopyCFString(kCFAllocatorDefault, name);
-		[hash setObject:value forKey:key];
-		[NSMakeCollectable(key) release];
+    if (value) {		
+      // Add converted value to hash
+      id key				= (NSString*)JSStringCopyCFString(kCFAllocatorDefault, name);
+      [hash setObject:value forKey:key];
+      [NSMakeCollectable(key) release];
+    }
 	}
 	JSPropertyNameArrayRelease(names);
 	*o = hash;
