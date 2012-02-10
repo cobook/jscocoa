@@ -3922,8 +3922,12 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 				id property = NULL;
 				if ([JSCocoaFFIArgument unboxJSValueRef:jsValue toObject:&property inContext:ctx])
 				{
-					[array replaceObjectAtIndex:propertyIndex withObject:property];
-					return	true;
+          if (property) {
+            [array replaceObjectAtIndex:propertyIndex withObject:property];
+            return	true;
+          } else {
+            return false;
+          }
 				}
 				else	return false;
 			}
