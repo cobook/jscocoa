@@ -3762,12 +3762,17 @@ call:
 				if (result && JSValueGetType(ctx, result) == kJSTypeObject)
 				{
 //					JSObjectRef o = [JSCocoaController jsCocoaPrivateFunctionInContext:ctx];
-					JSObjectRef o = [jsc newPrivateFunction];
-					JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
-					private.type = @"jsFunction";
-          NSLog(@"script:%@ result:%@ object:%@ propertyName:%@", script, [jsc unboxJSValueRef:result], [jsc unboxJSValueRef:object], propertyName);
-					[private setJSValueRef:result ctx:ctx];
-					return	o;
+          id value = [jsc unboxJSValueRef:result];
+          if (value) {
+            JSObjectRef o = [jsc newPrivateFunction];
+            JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
+            private.type = @"jsFunction";
+            NSLog(@"script:%@ result:%@ object:%@ propertyName:%@", script, value, [jsc unboxJSValueRef:object], propertyName);
+            [private setJSValueRef:result ctx:ctx];
+            return	o;
+          } else {
+            return nil;
+          }
 				}
 
 				methodName = propertyName;
