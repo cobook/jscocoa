@@ -285,7 +285,9 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	useSplitCall	= NO;
 	ownsContext		= NO;
 
-	[JSCocoa updateCustomCallPaths];
+  if (!customCallPathsCacheIsClean) {
+    [JSCocoa updateCustomCallPaths];
+  }
 	return	self;
 }
 
