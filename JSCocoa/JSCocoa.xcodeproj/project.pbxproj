@@ -297,7 +297,7 @@
 				INSTALL_PATH = "@loader_path/../Frameworks";
 				PRODUCT_NAME = JSCocoa;
 				PROVISIONING_PROFILE = "";
-				SDKROOT = macosx10.6;
+				SDKROOT = "";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Debug;
@@ -320,7 +320,7 @@
 				INSTALL_PATH = "@loader_path/../Frameworks";
 				PRODUCT_NAME = JSCocoa;
 				PROVISIONING_PROFILE = "";
-				SDKROOT = macosx10.6;
+				SDKROOT = "";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;
