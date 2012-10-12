@@ -4016,7 +4016,13 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 			id property = NULL;
 			if ([JSCocoaFFIArgument unboxJSValueRef:jsValue toObject:&property inContext:ctx])
 			{
-				[dictionary setObject:property forKey:propertyName];
+        @try {
+          [dictionary setObject:property forKey:propertyName];
+        }
+        @catch (NSException *exception) {
+          NSLog(@"cannot set value %@ for property %@: %@", property, propertyName, exception);
+          return false;
+        }
 				return	true;
 			}
 			else	return false;
